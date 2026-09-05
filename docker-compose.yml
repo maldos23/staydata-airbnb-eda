@@ -1,0 +1,39 @@
+services:
+  # One-shot run: rebuilds the table, prints the summary and writes the figures.
+  eda:
+    build: .
+    image: staydata-airbnb-eda:0.2.0
+    container_name: staydata-eda
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+    environment:
+      RAW_DATA_PATH: /app/data/raw/airbnb_price_prediction.xlsx
+      CACHE_PATH: /app/data/interim/listings.parquet
+      FIGURES_DIR: /app/reports/figures
+
+  # Interactive run: JupyterLab on http://localhost:8888 (no token).
+  lab:
+    build: .
+    image: staydata-airbnb-eda:0.2.0
+    container_name: staydata-lab
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./notebooks:/app/notebooks
+    environment:
+      RAW_DATA_PATH: /app/data/raw/airbnb_price_prediction.xlsx
+      CACHE_PATH: /app/data/interim/listings.parquet
+      FIGURES_DIR: /app/reports/figures
+    command: >
+      jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+      --IdentityProvider.token='' --ServerApp.root_dir=/app
+
+  # Test run: executes the unit test suite inside the image.
+  tests:
+    build: .
+    image: staydata-airbnb-eda:0.2.0
+    container_name: staydata-tests
+    command: ["python", "-m", "pytest", "tests", "-q"]
