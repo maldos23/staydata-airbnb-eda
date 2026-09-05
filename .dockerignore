@@ -1,0 +1,7 @@
+data/
+reports/figures/
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
