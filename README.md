@@ -43,6 +43,25 @@ jupyter lab notebooks/01_exploratory_analysis.ipynb   # notebook
 pytest tests -q                  # pruebas
 ```
 
+### Sitio web (dashboard)
+
+`--site` vuelca todo lo que imprime la ejecución en `site/data.js` (un único
+`window.DATA`) y copia las figuras a `site/figures/`. El sitio es HTML estático
+sin build: lee esas variables y las pinta.
+
+```bash
+python -m staydata_eda.main --site        # regenera site/data.js + site/figures/
+python -m http.server -d site 8000        # verlo en http://localhost:8000
+```
+
+Despliegue en Vercel: importar el repositorio y dejar *Framework Preset* en
+`Other`; `vercel.json` ya fija `outputDirectory: site`. La integración Git de
+Vercel redespliega en cada commit a `main`, así que no hace falta un workflow de
+GitHub Actions. Los números del sitio cambian cuando se vuelve a correr el
+análisis en local (el `.xlsx` no está versionado) y se commitea `site/data.js`.
+
+---
+
 ### Dónde va la base
 
 El archivo `.xlsx` **no está versionado** (pesa 37 MB y está ignorado en

@@ -7,6 +7,7 @@ services:
     volumes:
       - ./data:/app/data
       - ./reports:/app/reports
+      - ./site:/app/site
     environment:
       RAW_DATA_PATH: /app/data/raw/airbnb_price_prediction.xlsx
       CACHE_PATH: /app/data/interim/listings.parquet
